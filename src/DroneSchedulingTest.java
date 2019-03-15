@@ -91,6 +91,13 @@ public class DroneSchedulingTest {
 		int actualNPS = DroneScheduling.calculateNetPromoterScore(promoters, detractors, responses);
 		assertEquals("failure - NPS is not correct", expectedNPS, actualNPS);
 	}
+	
+	//Sorry I didn't have enough time to test this method :(
+//	@Test
+//	public void testWriteToOutputFile(){
+//		String outputFile = "/Users/ryanvo1/Documents/workspace/DroneDelivery/src/DroneOutputs.txt";
+//		
+//	}
 
 }
 
