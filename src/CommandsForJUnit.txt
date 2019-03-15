@@ -1,0 +1,4 @@
+Command for JUnit test:
+Compile: javac -cp .:junit-4.13-beta-2.jar:hamcrest-2.1.jar DroneSchedulingTest.java
+Run: java -cp .:junit-4.13-beta-2.jar:hamcrest-2.1.jar org.junit.runner.JUnitCore DroneSchedulingTest
+Run DroneScheduling with arguments: java DroneScheduling /Users/ryanvo1/Documents/workspace/DroneDelivery/src/DroneInputs.txt /Users/ryanvo1/Documents/workspace/DroneDelivery/src/DroneOutputs.txt
