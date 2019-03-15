@@ -31,11 +31,6 @@ public class DroneScheduling {
 		} 
 		
 		sortOrdersByFinishTime(orders); //sort orders by their finish times
-		//debug sorted orders
-		System.out.println("");
-		for(int i = 0; i < orders.size(); i++){
-			System.out.println(orders.get(i).toString());
-		}
 		
 		try {
 			writeToOutputFile(args[1]); //save the orders to output file
@@ -56,7 +51,7 @@ public class DroneScheduling {
 		Scanner sc = new Scanner(new File(inputFile));
 		while(sc.hasNextLine()){
 			String str = sc.nextLine();
-			Order newOrder = extractOrderInfo(str);
+			Order newOrder = extractOrderInfo(str); 
 			orders.add(newOrder);
 		}
 		sc.close();
@@ -95,7 +90,6 @@ public class DroneScheduling {
 		LocalTime finishTime = calculateTime(distance, timeStamp);
 		
 		Order newOrder = new Order(id, location, timeStamp, finishTime, distance);
-		//System.out.println(newOrder.toString());
 		
 		return newOrder;
 		
@@ -127,22 +121,24 @@ public class DroneScheduling {
 		BufferedWriter bw = new BufferedWriter(fw);
 		
 		LocalTime departureTime = droneStartTime;
-		
 		int promoters = 0;
 		int detractors = 0;
 		
 		//Interval scheduling, earliest-finish-time first algorithm			
 		for(int i = 0; i < orders.size(); i++){
 			Order order = orders.get(i);
-			bw.write(order.getId() + " " + departureTime + "\n");
+			
 			LocalTime arrivalTime = calculateTime(order.getDistance(), departureTime);
 			
 			if(arrivalTime.isAfter(droneEndTime)){ //can't deliver after 10pm
 				System.out.println("The arrival time of order " + order.getId() + " is " + arrivalTime);
 				System.out.println("No drone delivery after 10:00 PM, please schedule this order tomorrow!");
+				break;
 			}
+			bw.write(order.getId() + " " + departureTime + "\n");
 			
-			long minutesBetween = Duration.between(order.getTimeStamp(), arrivalTime).toMinutes();
+			long minutesBetween = Duration.between(order.getTimeStamp(), arrivalTime).toMinutes(); //ask here
+			//long minutesBetween = Duration.between(droneStartTime, arrivalTime).toMinutes();
 			
 			//System.out.println("diff between " + order.getTimeStamp() + " and " + arrivalTime + " is: " + minutesBetween);
 			if(minutesBetween <= 60){ //<= 1 hour => promoters
@@ -155,7 +151,6 @@ public class DroneScheduling {
 		}
 		int NPS = calculateNetPromoterScore(promoters, detractors, orders.size()); //calculate NPS
 		bw.write("NPS " + NPS + "\n");
-		
         bw.flush(); 
         bw.close();
 	}
@@ -180,7 +175,7 @@ public class DroneScheduling {
 	}
 	
 	/**
-	 * Calculate the finish time with the given start time
+	 * Calculate the finish time with the given start time and distance
 	 * @param distance the between the warehouse and customer's address
 	 * @param startTime the start time
 	 * @return the finish time
